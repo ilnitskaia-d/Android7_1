@@ -7,6 +7,4 @@ class GetAllItemsUseCase @Inject constructor(
     private val itemRepository: ItemRepository
 ) {
     suspend fun getAllItems() = itemRepository.getAllItems()
-
-
 }

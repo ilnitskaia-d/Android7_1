@@ -1,8 +1,6 @@
 package com.example.android7.data.database.repositories
 
 
-import com.example.android7.data.api.CameraApi
-import com.example.android7.data.api.Response
 import com.example.android7.data.database.dao.ItemDao
 import com.example.android7.data.mapper.mapToItem
 import com.example.android7.data.mapper.mapToItemModelList
@@ -15,14 +13,8 @@ import java.lang.Exception
 import javax.inject.Inject
 
 class ItemRepositoryImp @Inject constructor(
-    private val dao: ItemDao,
-    private val api: CameraApi
+    private val dao: ItemDao
 ): ItemRepository {
-    override suspend fun getCameras(): Flow<Response> =
-        flow {
-            val response = api.getCameras()
-            emit(response)
-        }
 
     override suspend fun getAllItems(): Flow<Resource<List<ItemModel>>> =
         flow{
