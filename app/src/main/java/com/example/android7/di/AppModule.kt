@@ -2,6 +2,7 @@ package com.example.android7.di
 
 import android.content.Context
 import androidx.room.Room
+import com.example.android7.data.api.CameraApi
 import com.example.android7.data.database.ItemDatabase
 import com.example.android7.data.database.dao.ItemDao
 import com.example.android7.data.database.repositories.ItemRepositoryImp
@@ -10,6 +11,9 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.create
 import javax.inject.Singleton
 
 @Module
@@ -40,4 +44,8 @@ object AppModule {
     @Provides
     fun provideDeleteItemUseCase(dao: ItemDao) =
         ItemRepositoryImp(dao)
+
+    @Provides
+    fun provideCameraApi() : CameraApi = Retrofit.Builder().baseUrl("http://cars.cprogroup.ru/api/rubetek/")
+        .addConverterFactory(GsonConverterFactory.create()).build().create(CameraApi::class.java)
 }

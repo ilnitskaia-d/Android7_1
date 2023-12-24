@@ -1,10 +1,12 @@
 package com.example.android7.ui
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -35,12 +37,8 @@ class FragmentCameras : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         getAllData()
-        val rvAdapter = RVAdapter(
-            listOf()
-        )
 
         binding.rv.apply {
-            adapter = rvAdapter
             layoutManager = LinearLayoutManager(
                 this@FragmentCameras.context,
                 LinearLayoutManager.VERTICAL,
@@ -55,12 +53,16 @@ class FragmentCameras : Fragment() {
             viewModel.getAllItems()
             viewModel.items.collect{
                 when (it) {
-                    is UIState.Empty -> print("progressBar.visibility = gone")
-                    is UIState.Error -> print("error")
-                    is UIState.Loading -> print("progressBar.visibility = visible")
+                    is UIState.Empty -> binding.progressBar.visibility = View.GONE
+                    is UIState.Error -> {
+                        Toast.makeText(context, "Error", Toast.LENGTH_LONG).show()
+                        binding.progressBar.visibility = View.GONE
+                    }
+                    is UIState.Loading -> binding.progressBar.visibility = View.VISIBLE
                     is UIState.Success -> {
-                        print("progressBar.visibility = visible")
-                        print("adapter.setItemList")
+                        binding.progressBar.visibility = View.GONE
+                        binding.rv.adapter = RVAdapter(it.data!!)
+                        Toast.makeText(context, "Successful", Toast.LENGTH_LONG).show()
                     }
                 }
             }
@@ -72,12 +74,15 @@ class FragmentCameras : Fragment() {
             viewModel.insertItem(itemModel)
             viewModel.insertItemsStatus.collect{
                 when (it) {
-                    is UIState.Empty -> print("progressBar.visibility = gone")
-                    is UIState.Error -> print("error")
-                    is UIState.Loading -> print("progressBar.visibility = visible")
+                    is UIState.Empty -> binding.progressBar.visibility = View.GONE
+                    is UIState.Error -> {
+                        binding.progressBar.visibility = View.GONE
+                        Toast.makeText(context, "Error", Toast.LENGTH_LONG).show()
+                    }
+                    is UIState.Loading -> binding.progressBar.visibility = View.VISIBLE
                     is UIState.Success -> {
-                        print("progressBar.visibility = visible")
-                        print("show inserted successfully")
+                        binding.progressBar.visibility = View.GONE
+                        Toast.makeText(context, "Successfully inserted", Toast.LENGTH_LONG).show()
                     }
                 }
             }
@@ -89,12 +94,15 @@ class FragmentCameras : Fragment() {
             viewModel.deleteItem(itemModel)
             viewModel.deleteItemsStatus.collect{
                 when (it) {
-                    is UIState.Empty -> print("progressBar.visibility = gone")
-                    is UIState.Error -> print("error")
-                    is UIState.Loading -> print("progressBar.visibility = visible")
+                    is UIState.Empty -> binding.progressBar.visibility = View.GONE
+                    is UIState.Error -> {
+                        Toast.makeText(context, "Error", Toast.LENGTH_LONG).show()
+                        binding.progressBar.visibility = View.GONE
+                    }
+                    is UIState.Loading -> binding.progressBar.visibility = View.VISIBLE
                     is UIState.Success -> {
-                        print("progressBar.visibility = visible")
-                        print("show deleted successfully")
+                        binding.progressBar.visibility = View.GONE
+                        Toast.makeText(context, "Successfully deleted", Toast.LENGTH_LONG).show()
                     }
                 }
             }

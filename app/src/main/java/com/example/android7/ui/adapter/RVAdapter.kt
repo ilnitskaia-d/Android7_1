@@ -8,9 +8,10 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.bumptech.glide.Glide
 import com.example.android7.databinding.ItemLayoutBinding
 import com.example.android7.data.database.model.Item
+import com.example.android7.domain.model.ItemModel
 
 
-class RVAdapter(private val list: List<Item>): Adapter<RVAdapter.ItemViewHolder>() {
+class RVAdapter(private val list: List<ItemModel>): Adapter<RVAdapter.ItemViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         return ItemViewHolder(
@@ -31,7 +32,7 @@ class RVAdapter(private val list: List<Item>): Adapter<RVAdapter.ItemViewHolder>
     }
 
     inner class ItemViewHolder(private val binding: ItemLayoutBinding):ViewHolder(binding.root) {
-        fun bind(item: Item) {
+        fun bind(item: ItemModel) {
             binding.apply {
                 tvCamera.text = item.name
                 Glide.with(binding.root).load(item.snapshot).centerCrop().into(ivCamera)

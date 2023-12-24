@@ -7,7 +7,6 @@ import javax.inject.Inject
 class DeleteItemUseCase @Inject constructor(
     private val repo: ItemRepository
 ) {
-
     suspend fun deleteItem(itemModel: ItemModel) =
         repo.deleteItem(itemModel)
 }

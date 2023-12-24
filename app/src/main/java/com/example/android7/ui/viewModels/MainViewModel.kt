@@ -2,8 +2,10 @@ package com.example.android7.ui.viewModels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.android7.data.api.CameraApi
 import com.example.android7.data.database.repositories.ItemRepositoryImp
 import com.example.android7.domain.model.ItemModel
+import com.example.android7.domain.usecase.DeleteItemUseCase
 import com.example.android7.domain.usecase.GetAllItemsUseCase
 import com.example.android7.domain.usecase.InsertItemUseCase
 import com.example.android7.domain.utils.Resource
@@ -17,7 +19,9 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val getAllItemsUseCase: GetAllItemsUseCase,
-    private val insertItemUseCase: InsertItemUseCase
+    private val insertItemUseCase: InsertItemUseCase,
+    private val deleteItemUseCase: DeleteItemUseCase,
+    private val cameraApi: CameraApi
 ): ViewModel() {
 
     private var _items = MutableStateFlow<UIState<List<ItemModel>>>(UIState.Empty())
@@ -62,7 +66,7 @@ class MainViewModel @Inject constructor(
 
     suspend fun deleteItem(itemModel: ItemModel) {
         viewModelScope.launch {
-            insertItemUseCase.insertItem(itemModel).collect{
+            deleteItemUseCase.deleteItem(itemModel).collect{
                 when(it) {
                     is Resource.Loading -> _deleteItemsStatus .value = UIState.Loading()
                     is Resource.Success -> _deleteItemsStatus .value = UIState.Success(it.data)
